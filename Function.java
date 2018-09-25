@@ -5,14 +5,14 @@ import java.util.List;
 public class Function {
 	private List<Node> nodes;
 	
-	public Function(List<Node> _nodes) {
-		nodes = _nodes;
+	public Function() {
+		
 	}
 	
 	//check all nodes are connected. 
 	//if connected return true, else return false;
 	public boolean errorChecking() {
-		return true;
+		return false;
 	}
 	
 	//sort the List order by duration descend
@@ -20,5 +20,8 @@ public class Function {
 		return nodes;
 	}
 	
+	public void inputNodes(List<Node> _nodes) {
+		nodes = _nodes;
+	}
 
 }
