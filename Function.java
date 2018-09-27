@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -5,14 +6,14 @@ import java.util.List;
 public class Function {
 	private List<Node> nodes;
 	
-	public Function(List<Node> _nodes) {
-		nodes = _nodes;
+	public Function() {
+		nodes = new ArrayList<Node>();
 	}
 	
 	//check all nodes are connected. 
 	//if connected return true, else return false;
 	public boolean errorChecking() {
-		return true;
+		return false;
 	}
 	
 	//sort the List order by duration descend
@@ -20,5 +21,11 @@ public class Function {
 		return nodes;
 	}
 	
-
+	public void inputNodes(List<Node> _nodes) {
+		nodes = _nodes;
+	}
+	
+	public boolean hasNode(String name) {
+		return false;
+	}
 }

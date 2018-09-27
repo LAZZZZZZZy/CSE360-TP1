@@ -11,8 +11,8 @@ public class Node {
 		dependencies = _dependencies;
 	}
 	
-	public void addDependent(Node node) {
-		dependencies.add(node);
+	public void addDependent(Node dependent) {
+		dependencies.add(dependent);
 	}
 	
 	public void setDuration(int val) {
