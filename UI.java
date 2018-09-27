@@ -20,9 +20,9 @@ import javax.swing.JToolBar;
 public class UI extends JFrame implements ActionListener{
 	//UI Component
 	private JMenuBar menubar;
-	private JMenu help,about,quit;	
+	private JMenu helpm,aboutm;	
 	private JToolBar toolbar;
-	private JButton input,process,restart;
+	private JButton input,process,restart,quit;
 	
 	private ListPanel listpanel;
 	private InputPanel inputpanel;
@@ -42,28 +42,31 @@ public class UI extends JFrame implements ActionListener{
 		// menu bar
 		menubar = new JMenuBar();
 		
-		help = new JMenu("Help");
-		about = new JMenu("About");
-		quit = new JMenu("Quit");
+		helpm = new JMenu("Help");
+		aboutm = new JMenu("About");
 		
-		menubar.add(help);
-		menubar.add(about);
-		menubar.add(quit);
+		menubar.add(helpm);
+		menubar.add(aboutm);
 		//tool bar
 		toolbar = new JToolBar();
 
 		input = new JButton("Input");
 		process = new JButton("Process");
 		restart = new JButton("Restart");
+		quit = new JButton("Quit");
 		input.addActionListener(this);
 		process.addActionListener(this);
 		restart.addActionListener(this);
+		quit.addActionListener(this);
 		
 		toolbar.add(input);
 		toolbar.addSeparator();
 		toolbar.add(process);
 		toolbar.addSeparator();
 		toolbar.add(restart);
+		toolbar.addSeparator();
+		toolbar.add(quit);
+
 		//graphic area
 
 
@@ -109,6 +112,11 @@ public class UI extends JFrame implements ActionListener{
 			} else {
 				JOptionPane.showMessageDialog(this,"some of activies are not connected");
 			}
+		}
+		
+		if(e.getSource()==helpm) {
+			System.out.println("1");
+			JOptionPane.showMessageDialog(this,"help");
 		}
 	}
 	
