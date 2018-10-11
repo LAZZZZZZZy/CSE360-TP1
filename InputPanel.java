@@ -80,27 +80,21 @@ public class InputPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Make an array out of Dependencies
-        String[] depend = dependein.getText().split(",");
+    	 String[] depend = dependein.getText().split(",");
 
-        // Check if durin is a number and not a text
-        if (!durin.getText().matches("[0-9]+")) {
-            JOptionPane.showMessageDialog(this, "duration must be integer");
-        } 
-        // Activity cannot be added twice
-        else if (function.activityExists(actin.getText())) {
-            JOptionPane.showMessageDialog(this, "Activity already added");
-        } 
-        // Check if all the dependencies exist && list is not empty string
-        else if (!function.dependenciesExists(depend) && !(depend.length == 1 && depend[0].equals(""))) {
-            JOptionPane.showMessageDialog(this, "dependency does not exist");
-        }        
-        // Add new node to list
-        else {
-            // Get a list of dependencies for new node
-            List<Node> list = function.getListOFDepndencies(depend);
-            // Add new node to list of nodes
-            function.addNode(actin.getText(), Integer.parseInt(durin.getText()), list);
-        }
+       // Check if durin is a number and not a texst
+       if (!durin.getText().matches("[0-9]+")) {
+           JOptionPane.showMessageDialog(this, "duration must be integer");
+           return;
+       } 
+       // Activity cannot be added twice
+       if (function.activityExists(actin.getText())) {
+           JOptionPane.showMessageDialog(this, "Activity already added");
+           return;
+       }     
 
+       // Add new node to list of nodes
+       function.addNode(actin.getText(), Integer.parseInt(durin.getText()), depend);
+       JOptionPane.showMessageDialog(this, "Node added");
     }
 }
