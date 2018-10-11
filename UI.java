@@ -40,10 +40,10 @@ public class UI extends JFrame implements ActionListener {
   			card = new CardLayout();
   			mainpanel = new JPanel(card);
         nodes = new ArrayList<Node>();
-        function = new Function(nodes);
+        addedpanel = new AddedPanel();
+        function = new Function(nodes, addedpanel);
         inputpanel = new InputPanel(function);
         listpanel = new ListPanel(function);//paint panel
-        addedpanel = new AddedPanel(function);
         // menu bar
         menubar = new JMenuBar();
 

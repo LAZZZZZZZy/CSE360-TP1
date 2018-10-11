@@ -3,13 +3,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.JTextArea;
 
 public class Function {
 
     private List<Node> nodes;
+    private AddedPanel addedPanel;
 
-    public Function(List<Node> nodes) {
+    public Function(List<Node> nodes, AddedPanel addedPanel) {
         this.nodes = nodes;
+        this.addedPanel = addedPanel;
     }
 
     //check all nodes are connected. 
@@ -31,6 +34,7 @@ public class Function {
         Node newNode = new Node(activityName,duration,Dependencies);
         nodes.add(newNode);
         Collections.sort(nodes, Collections.reverseOrder());
+        this.updateList(addedPanel);
     }
 
     /**
@@ -99,5 +103,13 @@ public class Function {
 
     public boolean hasNode(String name) {
         return false;
+    }
+    
+        public void updateList(JTextArea textField) {
+        textField.setText("");
+        
+        for (Node n : nodes) {
+            textField.append(n.toString());
+        }
     }
 }
