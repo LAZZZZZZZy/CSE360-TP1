@@ -11,10 +11,10 @@ public class Node implements Comparable {
     public String[] temp_dependency;//temporary dependency from input
     private List<Node> dependencies;//exact dependencies
 
-    public Node(String _activity_name,int _duration,String[] _temp_dependency) {
-    		activity_name = _activity_name;
-    		duration = _duration;
-    		temp_dependency = _temp_dependency;
+    public Node(String _activity_name, int _duration, String[] _temp_dependency) {
+        activity_name = _activity_name;
+        duration = _duration;
+        temp_dependency = _temp_dependency;
         dependencies = new ArrayList<Node>();
     }
 
@@ -48,7 +48,27 @@ public class Node implements Comparable {
 
     @Override
     public String toString() {
-        return "Node{" + "activity_name=" + activity_name + ", duration=" + duration + ", dependencies=" + dependencies + '}';
+        return "Name:\t" + activity_name + "\n"
+                + "Duration:\t" + duration + "\n"
+                + "Dependencies:\t" + this.getDependenciesNames() + "\n";
+    }
+    
+    /**
+     * This method will return a string of the dependencies names.
+     * This is a helper method for the toString method.
+     * @return 
+     */
+    public String getDependenciesNames() {
+        String dependenciesNames = "";
+        if(this.dependencies.isEmpty()) {
+            dependenciesNames = "No dependencies";
+        } else {
+            for (Node depend : this.dependencies) {
+                dependenciesNames += depend.getName() + " ";
+            }
+        }
+        
+        return dependenciesNames + "\n";
     }
 
     @Override
