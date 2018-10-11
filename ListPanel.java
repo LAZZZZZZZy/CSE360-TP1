@@ -21,7 +21,7 @@ public class ListPanel extends JPanel{
 	}
 	
 	public void inputNodes(List<Node> _nodes) {
-		nodes = _nodes;
-		this.repaint();
+            nodes = _nodes;
+            this.repaint();
 	}
 }
