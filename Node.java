@@ -8,13 +8,10 @@ public class Node implements Comparable {
 
     private String activity_name;
     private int duration;
-    public String[] temp_dependency;//temporary dependency from input
-    private List<Node> dependencies;//exact dependencies
+    private String temp_dependency;
+    private List<Node> dependencies;
 
-    public Node(String _activity_name,int _duration,String[] _temp_dependency) {
-    		activity_name = _activity_name;
-    		duration = _duration;
-    		temp_dependency = _temp_dependency;
+    public Node() {
         dependencies = new ArrayList<Node>();
     }
 

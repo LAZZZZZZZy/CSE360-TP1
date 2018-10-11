@@ -27,8 +27,12 @@ public class Function {
         nodes = _nodes;
     }
 
-    public void addNode(String activityName, int duration, String[] Dependencies) {
-        Node newNode = new Node(activityName,duration,Dependencies);
+    public void addNode(String activityName, int duration, List<Node> Dependencies) {
+        Node newNode = new Node();
+        newNode.setName(activityName);
+        newNode.setDuration(duration);
+        newNode.setDependencies(Dependencies);
+
         nodes.add(newNode);
     }
 

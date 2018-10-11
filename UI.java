@@ -24,22 +24,26 @@ public class UI extends JFrame implements ActionListener {
     private JMenuBar menubar;
     private JMenu helpm, aboutm;
     private JToolBar toolbar;
-    private JButton input, process, restart, quit;
-    
-    private JPanel mainpanel;
+    private JButton input, process, restart, quit,added;
+
+  	private JPanel mainpanel;
     private ListPanel listpanel;
     private InputPanel inputpanel;
+    private AddedPanel addedpanel;
+    private CardLayout card;
 
     private Function function;
     private List<Node> nodes;//store all input nodes
 
     public UI() {
         //initialize
+  			card = new CardLayout();
+  			mainpanel = new JPanel(card);
         nodes = new ArrayList<Node>();
         function = new Function(nodes);
         inputpanel = new InputPanel(function);
         listpanel = new ListPanel(function);//paint panel
-
+        addedpanel = new AddedPanel(function);
         // menu bar
         menubar = new JMenuBar();
 
@@ -52,6 +56,7 @@ public class UI extends JFrame implements ActionListener {
         toolbar = new JToolBar();
 
         input = new JButton("Input");
+        added = new JButton("Added");
         process = new JButton("Process");
         restart = new JButton("Restart");
         quit = new JButton("Quit");
@@ -59,8 +64,11 @@ public class UI extends JFrame implements ActionListener {
         process.addActionListener(this);
         restart.addActionListener(this);
         quit.addActionListener(this);
+        added.addActionListener(this);
 
         toolbar.add(input);
+        toolbar.addSeparator();
+        toolbar.add(added);
         toolbar.addSeparator();
         toolbar.add(process);
         toolbar.addSeparator();
@@ -72,11 +80,11 @@ public class UI extends JFrame implements ActionListener {
         //add component
         this.setJMenuBar(menubar);
         this.add(toolbar, BorderLayout.NORTH);
-        inputpanel.setEnabled(false);
-        inputpanel.setVisible(false);
-        this.add(listpanel);
-        this.add(inputpanel);
-
+        
+    		mainpanel.add(inputpanel,"input");
+    		mainpanel.add(listpanel,"list");
+    		mainpanel.add(addedpanel,"added");
+        this.add(mainpanel,BorderLayout.CENTER);
 
         //property of Jframe
         this.setTitle("Path Analyzer");
@@ -94,13 +102,15 @@ public class UI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
         if (e.getSource() == input) {
-            inputpanel.setEnabled(true);
-            inputpanel.setVisible(true);
+        	card.show(mainpanel,"input");
         }
         if (e.getSource() == restart) {
             nodes.clear();
             JOptionPane.showMessageDialog(this, "reset");
         }
+        if (e.getSource() == added) {
+        	card.show(mainpanel,"added");
+      }
         if (e.getSource() == process) {
             function.inputNodes(nodes);
             if (function.errorChecking()) {
