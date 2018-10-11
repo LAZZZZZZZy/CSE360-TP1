@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -40,10 +41,10 @@ public class UI extends JFrame implements ActionListener {
   			card = new CardLayout();
   			mainpanel = new JPanel(card);
         nodes = new ArrayList<Node>();
-        function = new Function(nodes);
+        addedpanel = new AddedPanel();
+        function = new Function(nodes, addedpanel);
         inputpanel = new InputPanel(function);
         listpanel = new ListPanel(function);//paint panel
-        addedpanel = new AddedPanel(function);
         // menu bar
         menubar = new JMenuBar();
 
@@ -83,7 +84,7 @@ public class UI extends JFrame implements ActionListener {
         
     		mainpanel.add(inputpanel,"input");
     		mainpanel.add(listpanel,"list");
-    		mainpanel.add(addedpanel,"added");
+    		mainpanel.add(new JScrollPane(addedpanel),"added");
         this.add(mainpanel,BorderLayout.CENTER);
 
         //property of Jframe
