@@ -15,6 +15,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -83,7 +84,7 @@ public class UI extends JFrame implements ActionListener {
         
     		mainpanel.add(inputpanel,"input");
     		mainpanel.add(listpanel,"list");
-    		mainpanel.add(addedpanel,"added");
+    		mainpanel.add(new JScrollPane(addedpanel),"added");
         this.add(mainpanel,BorderLayout.CENTER);
 
         //property of Jframe
