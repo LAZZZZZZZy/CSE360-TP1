@@ -30,6 +30,7 @@ public class Function {
     public void addNode(String activityName, int duration, String[] Dependencies) {
         Node newNode = new Node(activityName,duration,Dependencies);
         nodes.add(newNode);
+        Collections.sort(nodes, Collections.reverseOrder());
     }
 
     /**
