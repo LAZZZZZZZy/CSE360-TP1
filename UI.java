@@ -117,7 +117,10 @@ public class UI extends JFrame implements ActionListener {
 		}
 
 		if ( e.getSource() == process ) {
-			function.ConnectNodes();
+			if(!function.ConnectNodes()) {
+				JOptionPane.showMessageDialog(this,"Some dependencies do not exist");
+				return;
+			}
 			if ( function.getNodes().isEmpty() ) {
 				JOptionPane.showMessageDialog(this,"No input node");
 				return;

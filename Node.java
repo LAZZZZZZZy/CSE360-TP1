@@ -2,14 +2,16 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Node implements Comparable {
 
     private String activity_name;
     private int duration;
     public String[] dependency;//temporary dependency from input
-    private List<Node> next;
+    private Set<Node> next;
     private boolean istail = true;
     private boolean isStart = false;
 
@@ -17,7 +19,7 @@ public class Node implements Comparable {
         activity_name = _activity_name;
         duration = _duration;
         dependency = _dependency;
-        next = new ArrayList<Node>();
+        next = new HashSet<Node>();
     }
 
 
@@ -29,7 +31,7 @@ public class Node implements Comparable {
     	next.add(dependent);
     }
     
-    public List<Node> getNext() {
+    public Set<Node> getNext() {
     	return next;
     }
     

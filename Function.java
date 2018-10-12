@@ -23,25 +23,26 @@ public class Function {
 	}
 	
 	//connect all nodes in the node list
-	public void ConnectNodes() {
-		if(connected) {
-			return;
-		}
+	public boolean ConnectNodes() {
+
 		for ( Node n : nodes ) {
 			//n is the start node if there is no dependencies
 			if(n.getDependency()[0].equals("")) {
 				n.setStart(true);
+				continue;
 			}
 			
 			for ( String temp : n.getDependency() ) {
 				if(dependenciesNode(temp)!=null) {
 					dependenciesNode(temp).addNext(n);
 					dependenciesNode(temp).setTail(false);
+				} else {
+					return false;
 				}
 			}
 		}
-		connected = true;
-		processed = false;
+
+		return true;
 	}
 	// check all nodes are connected.
 	// if connected return true, else return false;
@@ -86,9 +87,7 @@ public class Function {
 	 * 
 	 */
 	public void process () {
-		if(processed) {
-			return;
-		}
+
 		path.clear();
 		
 		for(Node n: nodes) {
@@ -97,7 +96,6 @@ public class Function {
 			}
 		}
 		descendSortList();
-		processed = true;
 	}
 	
 	//n is the start node
