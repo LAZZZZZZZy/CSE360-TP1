@@ -1,27 +1,36 @@
-import java.awt.Graphics;
+
+import java.awt.BorderLayout;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class ListPanel extends JPanel{
-	private List<Node> nodes;
 	private Function function;
+	private JTextArea content;
 	
 	public ListPanel(Function _function) {
+		this.setLayout(new BorderLayout());
 		function = _function;
+		content = new JTextArea();
+		content.setText("");	
 		
-		JScrollPane jsp = new JScrollPane(this);
+		JScrollPane jsp = new JScrollPane(content);
 		jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	}
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		content.setEditable(false);
+		
+		this.add(jsp,BorderLayout.CENTER);
 		
 	}
 	
-	public void inputNodes(List<Node> _nodes) {
-            nodes = _nodes;
-            this.repaint();
+	public void Output() {
+		content.setText("");
+		for(Path p:function.getPath()) {
+			content.append(p.toString());
+		}
+		this.repaint();
+		this.revalidate();
 	}
+	
 }

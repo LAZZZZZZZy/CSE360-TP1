@@ -106,28 +106,35 @@ public class UI extends JFrame implements ActionListener {
         	card.show(mainpanel,"input");
         }
         if (e.getSource() == restart) {
-            nodes.clear();
+            function.initial();
             JOptionPane.showMessageDialog(this, "reset");
         }
         if (e.getSource() == added) {
         	card.show(mainpanel,"added");
       }
+        
         if (e.getSource() == process) {
-            function.inputNodes(nodes);
-            if (function.errorChecking()) {
-                listpanel.inputNodes(nodes);
-                inputpanel.setVisible(false);
-                listpanel.setVisible(true);
-                System.out.println("2");
-            } else {
-                JOptionPane.showMessageDialog(this, "some of activies are not connected");
+        	function.ConnectNodes();
+        		if(function.getNodes().isEmpty()) {
+            	JOptionPane.showMessageDialog(this, "No input node");
+            	return;
+        		}
+        	
+        	
+            if (!function.errorCheckingCycle()) {
+            	JOptionPane.showMessageDialog(this, "It has a cycle");
+            	return;
             }
-        }
-
-        if (e.getSource() == helpm) {
-            System.out.println("1");
-            JOptionPane.showMessageDialog(this, "help");
-        }
+            
+            if (!function.errorCheckingConnect()) {
+            	JOptionPane.showMessageDialog(this, "some nodes are not connected");
+            	return;
+            }
+            		function.process();
+            		listpanel.Output();
+            		card.show(mainpanel,"list");
+            }
+        
     }
 
 }
