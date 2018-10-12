@@ -8,27 +8,21 @@ public class Node implements Comparable {
 
     private String activity_name;
     private int duration;
-    public String[] temp_dependency;//temporary dependency from input
-    private List<Node> dependencies;//exact dependencies
+    public String[] dependency;//temporary dependency from input
     private List<Node> next;
     private boolean istail = true;
-    private boolean ishead = false;
-    private boolean isconnect= false;
+    private boolean isStart = false;
 
-    public Node(String _activity_name, int _duration, String[] _temp_dependency) {
+    public Node(String _activity_name, int _duration, String[] _dependency) {
         activity_name = _activity_name;
         duration = _duration;
-        temp_dependency = _temp_dependency;
-        dependencies = new ArrayList<Node>();
+        dependency = _dependency;
         next = new ArrayList<Node>();
     }
 
+
     public void setName(String activity_name) {
         this.activity_name = activity_name;
-    }
-
-    public void addDependent(Node dependent) {
-        dependencies.add(dependent);
     }
     
     public void addNext(Node dependent) {
@@ -43,24 +37,20 @@ public class Node implements Comparable {
     	return istail;
     }
     
-    public boolean isHead() {
-    	return ishead;
+    public boolean isStart() {
+    	return isStart;
     }
     
-    public void setTail() {
-    	istail = false;
+    public void setTail(boolean b) {
+    	istail = b;
     }
     
-    public void setHead() {
-    	ishead = true;
+    public void setStart(boolean b) {
+    	isStart = b;
     }
 
     public void setDuration(int val) {
         duration = val;
-    }
-
-    public void setDependencies(List<Node> dependent) {
-        dependencies = dependent;
     }
 
     public int getDuration() {
@@ -70,12 +60,14 @@ public class Node implements Comparable {
     public String getName() {
         return activity_name;
     }
-
-    public List<Node> getDependencies() {
-        return dependencies;
-    }
     
-
+		/**
+		 * @return the temp_dependency
+		 */
+		public String[] getDependency () {
+			return dependency;
+		}
+    
     @Override
     public String toString() {
         return "Name:\t" + activity_name + "\n"
@@ -90,13 +82,11 @@ public class Node implements Comparable {
      */
     public String getDependenciesNames() {
         String dependenciesNames = "";
-        if(this.dependencies.isEmpty()) {
-            dependenciesNames = "No dependencies";
-        } else {
-            for (Node depend : this.dependencies) {
-                dependenciesNames += depend.getName() + " ";
+        for (String depend : dependency) {
+                dependenciesNames += depend+"   ";
             }
-        }
+        
+        
         
         return dependenciesNames + "\n";
     }
@@ -117,17 +107,4 @@ public class Node implements Comparable {
         }
     }
 
-		/**
-		 * @return the isconnect
-		 */
-		public boolean getIsconnect () {
-			return isconnect;
-		}
-
-		/**
-		 * @param isconnect the isconnect to set
-		 */
-		public void setIsconnect ( boolean isconnect ) {
-			this.isconnect = isconnect;
-		}
 }

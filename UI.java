@@ -106,18 +106,18 @@ public class UI extends JFrame implements ActionListener {
         	card.show(mainpanel,"input");
         }
         if (e.getSource() == restart) {
-            nodes.clear();
+            function.initial();
             JOptionPane.showMessageDialog(this, "reset");
         }
         if (e.getSource() == added) {
         	card.show(mainpanel,"added");
       }
+        
         if (e.getSource() == process) {
-            function.inputNodes(nodes);
+        	System.out.println(function.errorChecking());
             if (function.errorChecking()) {
-                listpanel.inputNodes(nodes);
-                inputpanel.setVisible(false);
-                listpanel.setVisible(true);
+            		function.process();
+            		card.show(listpanel,"list");
                 System.out.println("2");
             } else {
                 JOptionPane.showMessageDialog(this, "some of activies are not connected");

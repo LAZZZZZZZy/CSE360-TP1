@@ -2,7 +2,10 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.swing.JTextArea;
 
 public class Function {
@@ -16,20 +19,19 @@ public class Function {
 		this.addedPanel = addedPanel;
 		path = new ArrayList<Path>();
 	}
-
+	
+	//connect all nodes in the node list
 	public void ConnectNodes() {
 		for ( Node n : nodes ) {
 			//n is the start node if there is no dependencies
-			if(n.getDependencies().isEmpty()) {
-				n.setHead();
+			if(n.getDependency()[0].equals("")) {
+				n.setStart(true);
 			}
 			
-			for ( Node temp : n.getDependencies() ) {
-				if(dependenciesExists(temp)) {
-					temp.addNext(n);
-					temp.setTail();
-					temp.setIsconnect(true);
-					n.setIsconnect(true);
+			for ( String temp : n.getDependency() ) {
+				if(dependenciesNode(temp)!=null) {
+					dependenciesNode(temp).addNext(n);
+					dependenciesNode(temp).setTail(false);
 				}
 			}
 		}
@@ -37,19 +39,22 @@ public class Function {
 	// check all nodes are connected.
 	// if connected return true, else return false;
 	public boolean errorChecking () {
-		boolean correct = true;
+		ConnectNodes();
+		
+		boolean connect = true;
 		boolean hastail = false;
-		for(Node n : nodes) {		
-			if(!n.getIsconnect()) {
-				correct = false;
+		for ( Node n : nodes ) {
+			if(n.getNext().isEmpty()&&!n.isStart()) {
+				connect = false;
 				break;
 			}
 			
 			if(n.istail()) {
 				hastail = true;
+				break;
 			}
 		}
-		return correct&&hastail;
+		return connect&&hastail;
 	}
 
 	//n is the start node
@@ -96,50 +101,25 @@ public class Function {
 
 		nodes.add(newNode);
 
-		// Add Dependencies
-		for ( Node n : getListOFDepndencies(Dependencies) ) {
-			newNode.addDependent(n);
-		}
-
-		Collections.sort(nodes,Collections.reverseOrder());
 		this.updateList(addedPanel);
+		printList();
 	}
 
 	/**
-	 * Check if each dependency exists
+	 * If the dependencies node exist, return it. If not, return null
 	 *
 	 * @param list
-	 * @return True if each dependency exits
+	 * @return node
 	 */
-	public boolean dependenciesExists ( String[] list ) {
-		for ( String s : list ) {
-			boolean exists = false;
-			for ( Node n : nodes ) {
-				if ( n.getName().equals(s) ) {
-					exists = true;
-				}
-			}
-			// If dependency does not exists, return false
-			if ( !exists ) {
-				return false;
-			}
-		}
-
-		// All dependencies exits
-		return true;
-	}
-
-	public boolean dependenciesExists ( Node e ) {
-		boolean exists = false;
+	public Node dependenciesNode ( String s ) {
 		for ( Node n : nodes ) {
-			if ( n.getName().equals(e.getName()) ) {
-				exists = true;
-				break;
+			if ( n.getName().equals(s) ) {
+				return n;
 			}
 		}
-		return exists;
+		return null;
 	}
-
+	
 	/**
 	 * Similarly to dependenciesExists, this method checks if the given node
 	 * exists
@@ -189,6 +169,23 @@ public class Function {
 
 		for ( Node n : nodes ) {
 			textField.append(n.toString());
+		}
+	}
+	
+	public void initial() {
+		nodes.clear();
+		path.clear();
+	}
+
+	/**
+	 * 
+	 */
+	public void process () {
+		ConnectNodes();
+		for(Node n: nodes) {
+			if(n.isStart()) {
+				formPath(n,n.getDuration(),n.getName());
+			}
 		}
 	}
 }
