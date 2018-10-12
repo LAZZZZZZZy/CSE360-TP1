@@ -214,7 +214,7 @@ public class Function {
 
 	public void updateList ( JTextArea textField ) {
 		textField.setText("");
-
+		
 		for ( Node n : nodes ) {
 			textField.append(n.toString());
 		}

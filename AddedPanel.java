@@ -24,6 +24,7 @@ public class AddedPanel extends JTextArea {
      *
      */
     public AddedPanel() {
+    	this.setEditable(false);
         // TODO Auto-generated constructor stub
         //this.setLayout(null);
 
