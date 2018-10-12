@@ -48,8 +48,8 @@ public class UI extends JFrame implements ActionListener {
         // menu bar
         menubar = new JMenuBar();
 
-        helpm = new JMenu("Help");
-        aboutm = new JMenu("About");
+        helpm = new HelpMenu(this);
+        aboutm = new AboutMenu(this);
 
         menubar.add(helpm);
         menubar.add(aboutm);
