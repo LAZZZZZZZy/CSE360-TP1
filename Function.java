@@ -126,9 +126,9 @@ public class Function {
       @Override
       public int compare(Path p1, Path p2) {
           if (p1.getDuration()>p2.getDuration()) {
-              return 1;
-          } else if(p1.getDuration()<p2.getDuration()){
               return -1;
+          } else if(p1.getDuration()<p2.getDuration()){
+              return 1;
           } else {
           	return 0;
           }
