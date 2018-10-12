@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -84,9 +85,9 @@ public class InputPanel extends JPanel implements ActionListener {
 
        // Check if durin is a number and not a texst
        if (!durin.getText().matches("[0-9]+")) {
-           JOptionPane.showMessageDialog(this, "duration must be integer");
+           JOptionPane.showMessageDialog(this, "duration must be integer and positive");
            return;
-       } 
+       }
        // Activity cannot be added twice
        if (function.activityExists(actin.getText())) {
            JOptionPane.showMessageDialog(this, "Activity already added");
@@ -98,5 +99,8 @@ public class InputPanel extends JPanel implements ActionListener {
        function.addNode(actin.getText(), Integer.parseInt(durin.getText()), depend);
        
        JOptionPane.showMessageDialog(this, "Node added");
+       actin.setText("");
+       durin.setText("");
+       dependein.setText("");
     }
 }

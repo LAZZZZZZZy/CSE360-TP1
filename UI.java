@@ -101,6 +101,10 @@ public class UI extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == quit) {
+            System.exit(0);
+        }
+
         // TODO Auto-generated method stub
         if (e.getSource() == input) {
         	card.show(mainpanel,"input");
