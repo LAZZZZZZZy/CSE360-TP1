@@ -20,7 +20,7 @@ public class ListPanel extends JPanel{
 		jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		content.setEditable(false);
 		
-		this.add(content,BorderLayout.CENTER);
+		this.add(jsp,BorderLayout.CENTER);
 		
 	}
 	
