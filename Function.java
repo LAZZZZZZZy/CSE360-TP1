@@ -89,6 +89,8 @@ public class Function {
 		if(processed) {
 			return;
 		}
+		path.clear();
+		
 		for(Node n: nodes) {
 			if(n.isStart()) {
 				formPath(n,0,"");
@@ -221,6 +223,7 @@ public class Function {
 	public void initial() {
 		nodes.clear();
 		path.clear();
+		updateList(addedPanel);
 	}
 
 	/**
@@ -235,6 +238,13 @@ public class Function {
 	 */
 	public List<Path> getPath () {
 		return path;
+	}
+
+	/**
+	 * @return the nodes
+	 */
+	public List<Node> getNodes () {
+		return nodes;
 	}
 
 }

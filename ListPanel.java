@@ -25,9 +25,9 @@ public class ListPanel extends JPanel{
 	}
 	
 	public void Output() {
+		content.setText("");
 		for(Path p:function.getPath()) {
 			content.append(p.toString());
-			System.out.println(p.toString());
 		}
 		this.repaint();
 		this.revalidate();

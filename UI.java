@@ -115,6 +115,12 @@ public class UI extends JFrame implements ActionListener {
         
         if (e.getSource() == process) {
         	function.ConnectNodes();
+        		if(function.getNodes().isEmpty()) {
+            	JOptionPane.showMessageDialog(this, "No input node");
+            	return;
+        		}
+        	
+        	
             if (!function.errorCheckingCycle()) {
             	JOptionPane.showMessageDialog(this, "It has a cycle");
             	return;
