@@ -13,6 +13,8 @@ public class Function {
 	private List<Node> nodes;
 	private List<Path> path;
 	private AddedPanel addedPanel;
+	private boolean connected = false;
+	private boolean processed = false;
 
 	public Function ( List<Node> nodes, AddedPanel addedPanel ) {
 		this.nodes = nodes;
@@ -22,7 +24,9 @@ public class Function {
 	
 	//connect all nodes in the node list
 	public void ConnectNodes() {
-
+		if(connected) {
+			return;
+		}
 		for ( Node n : nodes ) {
 			//n is the start node if there is no dependencies
 			if(n.getDependency()[0].equals("")) {
@@ -36,6 +40,8 @@ public class Function {
 				}
 			}
 		}
+		connected = true;
+		processed = false;
 	}
 	// check all nodes are connected.
 	// if connected return true, else return false;
@@ -75,12 +81,16 @@ public class Function {
 	 * 
 	 */
 	public void process () {
+		if(processed) {
+			return;
+		}
 		for(Node n: nodes) {
 			if(n.isStart()) {
 				formPath(n,0,"");
-				System.out.println(n.getName());
 			}
 		}
+		descendSortList();
+		processed = true;
 	}
 	
 	//n is the start node
@@ -91,6 +101,7 @@ public class Function {
 			name += n.getName();
 			path.add(new Path(name,dur));
 			System.out.println(name+"  "+dur);
+			System.out.println(path.size());
 			return;
 		} else {
 			dur += n.getDuration();
@@ -205,6 +216,20 @@ public class Function {
 	public void initial() {
 		nodes.clear();
 		path.clear();
+	}
+
+	/**
+	 * @param connected the connected to set
+	 */
+	public void setConnected ( boolean connected ) {
+		this.connected = connected;
+	}
+
+	/**
+	 * @return the path
+	 */
+	public List<Path> getPath () {
+		return path;
 	}
 
 }

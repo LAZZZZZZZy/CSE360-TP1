@@ -125,8 +125,8 @@ public class UI extends JFrame implements ActionListener {
             	return;
             }
             		function.process();
-            		//card.show(listpanel,"list");
-                System.out.println("2");
+            		listpanel.Output();
+            		card.show(mainpanel,"list");
             }
         
 

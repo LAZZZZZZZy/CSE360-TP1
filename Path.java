@@ -43,7 +43,7 @@ public class Path {
 	
 	@Override
 	public String toString() {
-		return name+"   "+duration;
+		return "Name: "+name+"\n"+"Duration: "+duration+"\n";
 		
 	}
 }

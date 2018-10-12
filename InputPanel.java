@@ -94,6 +94,7 @@ public class InputPanel extends JPanel implements ActionListener {
        }     
 
        // Add new node to list of nodes
+       function.setConnected(false);
        function.addNode(actin.getText(), Integer.parseInt(durin.getText()), depend);
        
        JOptionPane.showMessageDialog(this, "Node added");
