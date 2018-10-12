@@ -3,100 +3,192 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.JTextArea;
 
 public class Function {
 
-    private List<Node> nodes;
+	private List<Node> nodes;
+	private List<Path> path;
+	private AddedPanel addedPanel;
 
-    public Function(List<Node> nodes) {
-        this.nodes = nodes;
-    }
+	public Function ( List<Node> nodes, AddedPanel addedPanel ) {
+		this.nodes = nodes;
+		this.addedPanel = addedPanel;
+		path = new ArrayList<Path>();
+	}
 
-    //check all nodes are connected. 
-    //if connected return true, else return false;
-    public boolean errorChecking() {
-        return false;
-    }
+	public void ConnectNodes() {
+		for ( Node n : nodes ) {
+			//n is the start node if there is no dependencies
+			if(n.getDependencies().isEmpty()) {
+				n.setHead();
+			}
+			
+			for ( Node temp : n.getDependencies() ) {
+				if(dependenciesExists(temp)) {
+					temp.addNext(n);
+					temp.setTail();
+					temp.setIsconnect(true);
+					n.setIsconnect(true);
+				}
+			}
+		}
+	}
+	// check all nodes are connected.
+	// if connected return true, else return false;
+	public boolean errorChecking () {
+		boolean correct = true;
+		boolean hastail = false;
+		for(Node n : nodes) {		
+			if(!n.getIsconnect()) {
+				correct = false;
+				break;
+			}
+			
+			if(n.istail()) {
+				hastail = true;
+			}
+		}
+		return correct&&hastail;
+	}
 
-    //sort the List order by duration descend
-    public List<Node> descendSortList() {
-        return nodes;
-    }
+	//n is the start node
+	public void formPath(Node n,double dur,String name) {
+		dur += n.getDuration();
+		name = name+ "-->" +n.getName();
+		
+		if(n.istail()) {
+			path.add(new Path(name,dur));
+			return;
+		}
 
-    public void inputNodes(List<Node> _nodes) {
-        nodes = _nodes;
-    }
+		for(Node next:n.getNext()) {
+			formPath(next,dur,name);
+		}
+		
+	}
+	
+	// sort the List order by duration descend
+	public void descendSortList () {
+		Collections.sort(path, new Comparator<Path>() {
 
-    public void addNode(String activityName, int duration, String[] Dependencies) {
-        Node newNode = new Node(activityName,duration,Dependencies);
-        nodes.add(newNode);
-    }
+      @Override
+      public int compare(Path p1, Path p2) {
+          if (p1.getDuration()>p2.getDuration()) {
+              return 1;
+          } else if(p1.getDuration()<p2.getDuration()){
+              return -1;
+          } else {
+          	return 0;
+          }
+      }
 
-    /**
-     * Check if each dependency exists
-     *
-     * @param list
-     * @return True if each dependency exits
-     */
-    public boolean dependenciesExists(String[] list) {
-        for (String s : list) {
-            boolean exists = false;
-            for (Node n : nodes) {
-                if (n.getName().equals(s)) {
-                    exists = true;
-                }
-            }
-            // If dependency does not exists, return false
-            if (!exists) {
-                return false;
-            }
-        }
+  });
+	}
 
-        // All dependencies exits
-        return true;
-    }
+	public void inputNodes ( List<Node> _nodes ) {
+		nodes = _nodes;
+	}
 
-    /**
-     * Similarly to dependenciesExists, this method checks if the given node
-     * exists
-     *
-     * @param activityName
-     * @return
-     */
-    public boolean activityExists(String activityName) {
-        for (Node n : nodes) {
-            if (n.getName().equals(activityName)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public void addNode ( String activityName, int duration,
+	                      String[] Dependencies ) {
+		Node newNode = new Node(activityName,duration,Dependencies);
 
-    /**
-     * Returns List of Activities with the same name
-     *
-     * @param strArr
-     * @return
-     */
-    public List<Node> getListOFDepndencies(String[] strArr) {
-        List<Node> list = new ArrayList<Node>();
-        for (String str : strArr) {
-            for (Node node : nodes) {
-                if (node.getName().equals(str)) {
-                    list.add(node);
-                }
-            }
-        }
-        return list;
-    }
+		nodes.add(newNode);
 
-    public void printList() {
-        for (Node n : nodes) {
-            System.out.println(n);
-        }
-    }
+		// Add Dependencies
+		for ( Node n : getListOFDepndencies(Dependencies) ) {
+			newNode.addDependent(n);
+		}
 
-    public boolean hasNode(String name) {
-        return false;
-    }
+		Collections.sort(nodes,Collections.reverseOrder());
+		this.updateList(addedPanel);
+	}
+
+	/**
+	 * Check if each dependency exists
+	 *
+	 * @param list
+	 * @return True if each dependency exits
+	 */
+	public boolean dependenciesExists ( String[] list ) {
+		for ( String s : list ) {
+			boolean exists = false;
+			for ( Node n : nodes ) {
+				if ( n.getName().equals(s) ) {
+					exists = true;
+				}
+			}
+			// If dependency does not exists, return false
+			if ( !exists ) {
+				return false;
+			}
+		}
+
+		// All dependencies exits
+		return true;
+	}
+
+	public boolean dependenciesExists ( Node e ) {
+		boolean exists = false;
+		for ( Node n : nodes ) {
+			if ( n.getName().equals(e.getName()) ) {
+				exists = true;
+				break;
+			}
+		}
+		return exists;
+	}
+
+	/**
+	 * Similarly to dependenciesExists, this method checks if the given node
+	 * exists
+	 *
+	 * @param activityName
+	 * @return
+	 */
+	public boolean activityExists ( String activityName ) {
+		for ( Node n : nodes ) {
+			if ( n.getName().equals(activityName) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns List of Activities with the same name
+	 *
+	 * @param strArr
+	 * @return
+	 */
+	public List<Node> getListOFDepndencies ( String[] strArr ) {
+		List<Node> list = new ArrayList<Node>();
+		for ( String str : strArr ) {
+			for ( Node node : nodes ) {
+				if ( node.getName().equals(str) ) {
+					list.add(node);
+				}
+			}
+		}
+		return list;
+	}
+
+	public void printList () {
+		for ( Node n : nodes ) {
+			System.out.println(n);
+		}
+	}
+
+	public boolean hasNode ( String name ) {
+		return false;
+	}
+
+	public void updateList ( JTextArea textField ) {
+		textField.setText("");
+
+		for ( Node n : nodes ) {
+			textField.append(n.toString());
+		}
+	}
 }

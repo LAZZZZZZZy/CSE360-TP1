@@ -10,12 +10,17 @@ public class Node implements Comparable {
     private int duration;
     public String[] temp_dependency;//temporary dependency from input
     private List<Node> dependencies;//exact dependencies
+    private List<Node> next;
+    private boolean istail = true;
+    private boolean ishead = false;
+    private boolean isconnect= false;
 
-    public Node(String _activity_name,int _duration,String[] _temp_dependency) {
-    		activity_name = _activity_name;
-    		duration = _duration;
-    		temp_dependency = _temp_dependency;
+    public Node(String _activity_name, int _duration, String[] _temp_dependency) {
+        activity_name = _activity_name;
+        duration = _duration;
+        temp_dependency = _temp_dependency;
         dependencies = new ArrayList<Node>();
+        next = new ArrayList<Node>();
     }
 
     public void setName(String activity_name) {
@@ -24,6 +29,30 @@ public class Node implements Comparable {
 
     public void addDependent(Node dependent) {
         dependencies.add(dependent);
+    }
+    
+    public void addNext(Node dependent) {
+    	next.add(dependent);
+    }
+    
+    public List<Node> getNext() {
+    	return next;
+    }
+    
+    public boolean istail() {
+    	return istail;
+    }
+    
+    public boolean isHead() {
+    	return ishead;
+    }
+    
+    public void setTail() {
+    	istail = false;
+    }
+    
+    public void setHead() {
+    	ishead = true;
     }
 
     public void setDuration(int val) {
@@ -45,10 +74,31 @@ public class Node implements Comparable {
     public List<Node> getDependencies() {
         return dependencies;
     }
+    
 
     @Override
     public String toString() {
-        return "Node{" + "activity_name=" + activity_name + ", duration=" + duration + ", dependencies=" + dependencies + '}';
+        return "Name:\t" + activity_name + "\n"
+                + "Duration:\t" + duration + "\n"
+                + "Dependencies:\t" + this.getDependenciesNames() + "\n";
+    }
+    
+    /**
+     * This method will return a string of the dependencies names.
+     * This is a helper method for the toString method.
+     * @return 
+     */
+    public String getDependenciesNames() {
+        String dependenciesNames = "";
+        if(this.dependencies.isEmpty()) {
+            dependenciesNames = "No dependencies";
+        } else {
+            for (Node depend : this.dependencies) {
+                dependenciesNames += depend.getName() + " ";
+            }
+        }
+        
+        return dependenciesNames + "\n";
     }
 
     @Override
@@ -66,4 +116,18 @@ public class Node implements Comparable {
             return -1;
         }
     }
+
+		/**
+		 * @return the isconnect
+		 */
+		public boolean getIsconnect () {
+			return isconnect;
+		}
+
+		/**
+		 * @param isconnect the isconnect to set
+		 */
+		public void setIsconnect ( boolean isconnect ) {
+			this.isconnect = isconnect;
+		}
 }
