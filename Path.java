@@ -8,11 +8,11 @@
  */
 public class Path {
 	private String name;
-	private double duration;
+	private int duration;
 	/**
 	 * 
 	 */
-	public Path (String _name, double _duration) {
+	public Path (String _name, int _duration) {
 		name = _name;
 		duration = _duration;
 	}
@@ -37,8 +37,13 @@ public class Path {
 	/**
 	 * @param duration the duration to set
 	 */
-	public void setDuration ( double duration ) {
+	public void setDuration ( int duration ) {
 		this.duration = duration;
 	}
-
+	
+	@Override
+	public String toString() {
+		return name+"   "+duration;
+		
+	}
 }

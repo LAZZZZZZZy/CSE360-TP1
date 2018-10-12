@@ -22,6 +22,7 @@ public class Function {
 	
 	//connect all nodes in the node list
 	public void ConnectNodes() {
+
 		for ( Node n : nodes ) {
 			//n is the start node if there is no dependencies
 			if(n.getDependency()[0].equals("")) {
@@ -38,33 +39,62 @@ public class Function {
 	}
 	// check all nodes are connected.
 	// if connected return true, else return false;
-	public boolean errorChecking () {
-		ConnectNodes();
-		
-		boolean connect = true;
+	public boolean errorCheckingCycle () {
+
 		boolean hastail = false;
 		for ( Node n : nodes ) {
-			if(n.getNext().isEmpty()&&!n.isStart()) {
-				connect = false;
-				break;
-			}
-			
 			if(n.istail()) {
 				hastail = true;
 				break;
 			}
 		}
-		return connect&&hastail;
+		return hastail;
 	}
-
+	
+	// check all nodes are connected.
+	// if connected return true, else return false;
+	public boolean errorCheckingConnect () {
+		Set<Node> s = new HashSet<Node>();
+		List<Node> l = new ArrayList<Node>();
+		l.addAll(nodes);
+		for ( Node n : nodes ) {
+			for(Node next : n.getNext()) {
+				s.add(n);
+				s.add(next);
+			}
+		}
+		l.removeAll(s);
+		if(l.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void process () {
+		for(Node n: nodes) {
+			if(n.isStart()) {
+				formPath(n,0,"");
+				System.out.println(n.getName());
+			}
+		}
+	}
+	
 	//n is the start node
-	public void formPath(Node n,double dur,String name) {
-		dur += n.getDuration();
-		name = name+ "-->" +n.getName();
+	public void formPath(Node n,int dur,String name) {
 		
 		if(n.istail()) {
+			dur += n.getDuration();
+			name += n.getName();
 			path.add(new Path(name,dur));
+			System.out.println(name+"  "+dur);
 			return;
+		} else {
+			dur += n.getDuration();
+			name += n.getName()+ "-->";
 		}
 
 		for(Node next:n.getNext()) {
@@ -177,15 +207,4 @@ public class Function {
 		path.clear();
 	}
 
-	/**
-	 * 
-	 */
-	public void process () {
-		ConnectNodes();
-		for(Node n: nodes) {
-			if(n.isStart()) {
-				formPath(n,n.getDuration(),n.getName());
-			}
-		}
-	}
 }

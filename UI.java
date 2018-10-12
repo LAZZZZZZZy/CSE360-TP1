@@ -114,15 +114,21 @@ public class UI extends JFrame implements ActionListener {
       }
         
         if (e.getSource() == process) {
-        	System.out.println(function.errorChecking());
-            if (function.errorChecking()) {
-            		function.process();
-            		card.show(listpanel,"list");
-                System.out.println("2");
-            } else {
-                JOptionPane.showMessageDialog(this, "some of activies are not connected");
+        	function.ConnectNodes();
+            if (!function.errorCheckingCycle()) {
+            	JOptionPane.showMessageDialog(this, "It has a cycle");
+            	return;
             }
-        }
+            
+            if (!function.errorCheckingConnect()) {
+            	JOptionPane.showMessageDialog(this, "some nodes are not connected");
+            	return;
+            }
+            		function.process();
+            		//card.show(listpanel,"list");
+                System.out.println("2");
+            }
+        
 
         if (e.getSource() == helpm) {
             System.out.println("1");
