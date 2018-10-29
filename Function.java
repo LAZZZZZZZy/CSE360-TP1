@@ -11,37 +11,39 @@ import javax.swing.JTextArea;
 public class Function {
 
 	private List<Node> nodes;
+	private List<Node> startNodes;
 	private List<Path> path;
 	private AddedPanel addedPanel;
-	private boolean connected = false;
-	private boolean processed = false;
 
 	public Function ( List<Node> nodes, AddedPanel addedPanel ) {
 		this.nodes = nodes;
 		this.addedPanel = addedPanel;
+		startNodes = new ArrayList<Node>();
 		path = new ArrayList<Path>();
 	}
 	
 	//connect all nodes in the node list
-	public void ConnectNodes() {
-		if(connected) {
-			return;
-		}
+	public boolean ConnectNodes() {
+
 		for ( Node n : nodes ) {
 			//n is the start node if there is no dependencies
 			if(n.getDependency()[0].equals("")) {
 				n.setStart(true);
+				startNodes.add(n);
+				continue;
 			}
 			
 			for ( String temp : n.getDependency() ) {
 				if(dependenciesNode(temp)!=null) {
 					dependenciesNode(temp).addNext(n);
 					dependenciesNode(temp).setTail(false);
+				} else {
+					return false;
 				}
 			}
 		}
-		connected = true;
-		processed = false;
+
+		return true;
 	}
 	// check all nodes are connected.
 	// if connected return true, else return false;
@@ -63,7 +65,28 @@ public class Function {
 		Set<Node> s = new HashSet<Node>();
 		List<Node> l = new ArrayList<Node>();
 		l.addAll(nodes);
-		for ( Node n : nodes ) {
+		//check multiple start nodes
+		if(startNodes.size()>1) {
+			int count =0 ;
+			for(Node start:startNodes) {
+				if(errorCheckingMulConnect(start,s)) {
+					count++;
+				}
+			}
+			if(count>1) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		//only one node
+		if(nodes.size()==1) {
+			return true;
+		}
+		
+		//check one start node
+		for ( Node n : nodes ) {			
 			for(Node next : n.getNext()) {
 				s.add(n);
 				s.add(next);
@@ -77,20 +100,32 @@ public class Function {
 		}
 	}
 	
+	public boolean errorCheckingMulConnect(Node n,Set<Node> s) {
+
+		for(Node next:n.getNext()) {
+			if(s.contains(next)) {
+				return false;
+			}
+			s.add(next);
+			if(!errorCheckingMulConnect(next,s)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	/**
 	 * 
 	 */
 	public void process () {
-		if(processed) {
-			return;
-		}
+
+		path.clear();
+		
 		for(Node n: nodes) {
 			if(n.isStart()) {
 				formPath(n,0,"");
 			}
 		}
 		descendSortList();
-		processed = true;
 	}
 	
 	//n is the start node
@@ -207,7 +242,7 @@ public class Function {
 
 	public void updateList ( JTextArea textField ) {
 		textField.setText("");
-
+		
 		for ( Node n : nodes ) {
 			textField.append(n.toString());
 		}
@@ -216,20 +251,22 @@ public class Function {
 	public void initial() {
 		nodes.clear();
 		path.clear();
+		updateList(addedPanel);
 	}
 
-	/**
-	 * @param connected the connected to set
-	 */
-	public void setConnected ( boolean connected ) {
-		this.connected = connected;
-	}
 
 	/**
 	 * @return the path
 	 */
 	public List<Path> getPath () {
 		return path;
+	}
+
+	/**
+	 * @return the nodes
+	 */
+	public List<Node> getNodes () {
+		return nodes;
 	}
 
 }

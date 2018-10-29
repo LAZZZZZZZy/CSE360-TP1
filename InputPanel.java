@@ -81,7 +81,11 @@ public class InputPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Make an array out of Dependencies
     	 String[] depend = dependein.getText().split(",");
-
+    	 if(actin.getText().isEmpty()) {
+    		 JOptionPane.showMessageDialog(this, "activity name cannot be empty");
+         return;
+    	 }
+    	 
        // Check if durin is a number and not a texst
        if (!durin.getText().matches("[0-9]+")) {
            JOptionPane.showMessageDialog(this, "duration must be integer");
@@ -94,9 +98,10 @@ public class InputPanel extends JPanel implements ActionListener {
        }     
 
        // Add new node to list of nodes
-       function.setConnected(false);
        function.addNode(actin.getText(), Integer.parseInt(durin.getText()), depend);
-       
+       actin.setText("");
+       durin.setText("");
+       dependein.setText("");
        JOptionPane.showMessageDialog(this, "Node added");
     }
 }
