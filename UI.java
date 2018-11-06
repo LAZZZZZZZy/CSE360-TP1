@@ -23,7 +23,7 @@ public class UI extends JFrame implements ActionListener {
 	// UI Component
 
 	private JMenuBar menubar;
-	private JMenu helpm, aboutm;
+	private JMenu helpm, aboutm,filem;
 	private JToolBar toolbar;
 	private JButton input, process, restart, quit, added,critical;
 
@@ -53,7 +53,9 @@ public class UI extends JFrame implements ActionListener {
 
 		helpm = new HelpMenu(this);
 		aboutm = new AboutMenu(this);
-
+		filem = new FileMenu(this);
+		
+		menubar.add(filem);
 		menubar.add(helpm);
 		menubar.add(aboutm);
 		// tool bar
