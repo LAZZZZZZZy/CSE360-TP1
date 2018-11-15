@@ -12,14 +12,17 @@ public class Node implements Comparable {
     private int duration;
     public String[] dependency;//temporary dependency from input
     private Set<Node> next;
+    private Set<Node> previous;
     private boolean istail = true;
     private boolean isStart = false;
+    private boolean ignored = false;
 
     public Node(String _activity_name, int _duration, String[] _dependency) {
         activity_name = _activity_name;
         duration = _duration;
         dependency = _dependency;
         next = new HashSet<Node>();
+        previous = new HashSet<Node>();
     }
 
 
@@ -108,5 +111,37 @@ public class Node implements Comparable {
             return -1;
         }
     }
+
+
+		/**
+		 * @return the previous
+		 */
+		public Set<Node> getPrevious () {
+			return previous;
+		}
+
+
+		/**
+		 * @param previous the previous to set
+		 */
+		public void setPrevious ( Node p ) {
+			previous.add(p);
+		}
+
+
+		/**
+		 * @return the ignored
+		 */
+		public boolean isIgnored () {
+			return ignored;
+		}
+
+
+		/**
+		 * @param ignored the ignored to set
+		 */
+		public void setIgnored ( boolean ignored ) {
+			this.ignored = ignored;
+		}
 
 }

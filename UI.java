@@ -47,7 +47,7 @@ public class UI extends JFrame implements ActionListener {
 		function = new Function(nodes,addedpanel);
 		inputpanel = new InputPanel(function);
 		listpanel = new ListPanel(function);// paint panel
-		criticalpanel = new CriticalPanel();
+		criticalpanel = new CriticalPanel(function);
 		// menu bar
 		menubar = new JMenuBar();
 
@@ -72,6 +72,7 @@ public class UI extends JFrame implements ActionListener {
 		restart.addActionListener(this);
 		quit.addActionListener(this);
 		added.addActionListener(this);
+		critical.addActionListener(this);
 
 		toolbar.add(input);
 		toolbar.addSeparator();
@@ -93,6 +94,7 @@ public class UI extends JFrame implements ActionListener {
 		mainpanel.add(inputpanel,"input");
 		mainpanel.add(listpanel,"list");
 		mainpanel.add(new JScrollPane(addedpanel),"added");
+		mainpanel.add(criticalpanel,"critical");
 		this.add(mainpanel,BorderLayout.CENTER);
 
 		// property of Jframe
@@ -148,10 +150,38 @@ public class UI extends JFrame implements ActionListener {
 			card.show(mainpanel,"list");
 		}
 		
+		if (e.getSource()==critical) {
+			System.out.println("11");
+			if(!function.ConnectNodes()) {
+				JOptionPane.showMessageDialog(this,"Some dependencies do not exist");
+				return;
+			}
+			if ( function.getNodes().isEmpty() ) {
+				JOptionPane.showMessageDialog(this,"No input node");
+				return;
+			}
+
+			if ( !function.errorCheckingCycle() ) {
+				JOptionPane.showMessageDialog(this,"It has a cycle");
+				return;
+			}
+
+			if ( !function.errorCheckingConnect() ) {
+				JOptionPane.showMessageDialog(this,"some nodes are not connected");
+				return;
+			}
+			
+			function.process();
+			criticalpanel.Output();
+			card.show(mainpanel,"critical");
+		}
+		
 		if(e.getSource()==quit) {
 			System.exit(0);
 		}
 
 	}
+	
+	
 
 }

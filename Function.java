@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,15 +12,26 @@ import javax.swing.JTextArea;
 public class Function {
 
 	private List<Node> nodes;
-	private List<Node> startNodes;
+	private Set<Node> startNodes;
+	private Set<Node> tailNodes;
 	private List<Path> path;
+	private List<Path> criticalPath;
+	private Set<Node> containNode;
+	HashMap<Node,Integer> early;
+	HashMap<Node,Integer> late; 
+	
 	private AddedPanel addedPanel;
 
 	public Function ( List<Node> nodes, AddedPanel addedPanel ) {
 		this.nodes = nodes;
 		this.addedPanel = addedPanel;
-		startNodes = new ArrayList<Node>();
+		startNodes = new HashSet<Node>();
 		path = new ArrayList<Path>();
+		criticalPath = new ArrayList<Path>();
+		tailNodes = new HashSet<Node>();
+		containNode = new HashSet<Node>();
+		early = new HashMap<Node,Integer>();
+		late  = new HashMap<Node,Integer>();
 	}
 	
 	//connect all nodes in the node list
@@ -36,6 +48,7 @@ public class Function {
 			for ( String temp : n.getDependency() ) {
 				if(dependenciesNode(temp)!=null) {
 					dependenciesNode(temp).addNext(n);
+					n.setPrevious(dependenciesNode(temp));
 					dependenciesNode(temp).setTail(false);
 				} else {
 					return false;
@@ -62,14 +75,14 @@ public class Function {
 	// check all nodes are connected.
 	// if connected return true, else return false;
 	public boolean errorCheckingConnect () {
-		Set<Node> s = new HashSet<Node>();
+		
 		List<Node> l = new ArrayList<Node>();
 		l.addAll(nodes);
 		//check multiple start nodes
 		if(startNodes.size()>1) {
 			int count =0 ;
 			for(Node start:startNodes) {
-				if(errorCheckingMulConnect(start,s)) {
+				if(errorCheckingMulConnect(start,containNode)) {
 					count++;
 				}
 			}
@@ -88,11 +101,11 @@ public class Function {
 		//check one start node
 		for ( Node n : nodes ) {			
 			for(Node next : n.getNext()) {
-				s.add(n);
-				s.add(next);
+				containNode.add(n);
+				containNode.add(next);
 			}
 		}
-		l.removeAll(s);
+		l.removeAll(containNode);
 		if(l.isEmpty()) {
 			return true;
 		} else {
@@ -111,25 +124,127 @@ public class Function {
 				return false;
 			}
 		}
+
 		return true;
 	}
+
 	/**
 	 * 
 	 */
 	public void process () {
 
-		path.clear();
+		processini();
 		
 		for(Node n: nodes) {
 			if(n.isStart()) {
-				formPath(n,0,"");
+				createPath(n,0,"");
 			}
 		}
+		createCritical();
 		descendSortList();
 	}
 	
+	/**
+	 * @param n
+	 */
+	private void createCritical () {
+		for(Node start:startNodes) {
+			early.put(start,start.getDuration());
+			Criticalearly(start);
+		}
+		
+		int max = 0;
+		for(Node tail:tailNodes) {
+			if(early.get(tail)>max) {
+				max = early.get(tail);
+			}
+		}
+		//ignore some tails path that smaller than the longest tail path
+		List<Node> remove = new ArrayList<Node>();
+		for(Node tail:tailNodes) {
+			if(early.get(tail)<max) {
+				tail.setIgnored(true);
+			}
+		}
+		
+		for(Node tail:tailNodes) {
+			late.put(tail,early.get(tail)-tail.getDuration());
+			Criticallate(tail);
+		}
+		
+		for(Node start:startNodes) {
+			createCriticalPath(start,0,"");
+		}
+
+	}
+	
+	/**
+	 * @param start 
+	 * 
+	 */
+	private void createCriticalPath (Node n,int dur,String name) {
+		if(n.istail()&&n.isIgnored()!=true) {
+			dur += n.getDuration();
+			name += n.getName();
+			criticalPath.add(new Path(name,dur));
+			return;
+		}
+		//since the late is late start time and early is early finished time
+		if(late.get(n)!=early.get(n)-n.getDuration()) {
+			return;
+		}
+		dur += n.getDuration();
+		name += n.getName()+"-->";
+		for(Node next:n.getNext()) {
+			createCriticalPath(next,dur,name);
+		}
+		return;
+	}
+
+	/**
+	 * @param start
+	 * late start time table
+	 */
+	private void Criticallate ( Node n ) {
+		if(n.isStart()) {
+			return;
+		}
+		for(Node pre:n.getPrevious()) {
+			if(late.containsKey(pre)){
+				if(late.get(pre)>late.get(n)-pre.getDuration()) {
+					late.put(pre,late.get(n)-pre.getDuration());
+				}
+			}else {
+				late.put(pre,late.get(n)-pre.getDuration());
+			}
+			Criticallate(pre);
+		}
+		return;
+		
+	}
+	//early finished time table
+	private void Criticalearly(Node n) {
+		if(n.istail()) {
+			return;	
+		}
+		for(Node next:n.getNext()) {
+			if(next.istail()) {
+				tailNodes.add(next);
+			}
+			if(early.containsKey(next)){
+				if(early.get(next)<early.get(n)+next.getDuration()) {
+					early.put(next,early.get(n)+next.getDuration());
+				}
+			}else {
+				early.put(next,early.get(n)+next.getDuration());
+			}
+			Criticalearly(next);
+		}
+		return;
+	}
+	
 	//n is the start node
-	public void formPath(Node n,int dur,String name) {
+	public void createPath(Node n,int dur,String name) {
 		
 		if(n.istail()) {
 			dur += n.getDuration();
@@ -144,7 +259,7 @@ public class Function {
 		}
 
 		for(Node next:n.getNext()) {
-			formPath(next,dur,name);
+			createPath(next,dur,name);
 		}
 		
 	}
@@ -201,9 +316,10 @@ public class Function {
 	 * exists
 	 *
 	 * @param activityName
+	 * @param dependency 
 	 * @return
 	 */
-	public boolean activityExists ( String activityName ) {
+	public boolean activityExists ( String activityName, String dependency ) {
 		for ( Node n : nodes ) {
 			if ( n.getName().equals(activityName) ) {
 				return true;
@@ -248,9 +364,25 @@ public class Function {
 		}
 	}
 	
+	public void processini() {
+		path.clear();
+		containNode.clear();
+		criticalPath.clear();
+		tailNodes.clear();
+		early.clear();
+		late.clear();
+	}
+	
 	public void initial() {
 		nodes.clear();
 		path.clear();
+		containNode.clear();
+		criticalPath.clear();
+		startNodes.clear();
+		tailNodes.clear();
+		early.clear();
+		late.clear();
+		
 		updateList(addedPanel);
 	}
 
@@ -267,6 +399,13 @@ public class Function {
 	 */
 	public List<Node> getNodes () {
 		return nodes;
+	}
+
+	/**
+	 * @return the criticalPath
+	 */
+	public List<Path> getCriticalPath () {
+		return criticalPath;
 	}
 
 }

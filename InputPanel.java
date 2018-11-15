@@ -103,7 +103,7 @@ public class InputPanel extends JPanel implements ActionListener {
 				return;
 			}
 			// Activity cannot be added twice
-			if ( function.activityExists(actin.getText()) ) {
+			if ( function.activityExists(actin.getText(),dependein.getText()) ) {
 				JOptionPane.showMessageDialog(this,"Activity already added");
 				return;
 			}
