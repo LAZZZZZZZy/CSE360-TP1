@@ -86,10 +86,10 @@ public class UI extends JFrame implements ActionListener {
 		toolbar.addSeparator();
 		toolbar.add(process);
 		toolbar.addSeparator();
-		toolbar.add(restart);
-		toolbar.addSeparator();
 		toolbar.add(report);
                 toolbar.addSeparator();
+                toolbar.add(restart);
+		toolbar.addSeparator();
 		toolbar.add(quit);
 
 		// graphic area
