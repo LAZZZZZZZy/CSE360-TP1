@@ -319,7 +319,7 @@ public class Function {
 	 * @param dependency 
 	 * @return
 	 */
-	public boolean activityExists ( String activityName, String dependency ) {
+	public boolean activityExists ( String activityName) {
 		for ( Node n : nodes ) {
 			if ( n.getName().equals(activityName) ) {
 				return true;
@@ -407,5 +407,20 @@ public class Function {
 	public List<Path> getCriticalPath () {
 		return criticalPath;
 	}
+        
+        /**
+         * Updates activity duration
+         * @param activity
+         * @param newDuration 
+         */
+        public void updateDuraton(String activity, int newDuration){
+           for (Node n : nodes) {
+               if (n.getName().equals(activity)) {
+                   n.setDuration(newDuration);
+                   break;
+               }
+           }
+           this.updateList(addedPanel);
+        }
 
 }

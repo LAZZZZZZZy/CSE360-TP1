@@ -84,10 +84,6 @@ public class InputPanel extends JPanel implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed ( ActionEvent e ) {
-		//modify the duration of node
-		if ( e.getSource() == modify ) {
-
-		}
 		
 		if ( e.getSource() == add ) {
 		// Make an array out of Dependencies
@@ -103,7 +99,7 @@ public class InputPanel extends JPanel implements ActionListener {
 				return;
 			}
 			// Activity cannot be added twice
-			if ( function.activityExists(actin.getText(),dependein.getText()) ) {
+			if ( function.activityExists(actin.getText()) ) {
 				JOptionPane.showMessageDialog(this,"Activity already added");
 				return;
 			}
@@ -114,6 +110,32 @@ public class InputPanel extends JPanel implements ActionListener {
 			durin.setText("");
 			dependein.setText("");
 			JOptionPane.showMessageDialog(this,"Node added");
+		}
+                
+                //modify the duration of node
+		if ( e.getSource() == modify ) {
+                        String[] depend = dependein.getText().split(",");
+                        if ( actin.getText().isEmpty() ) {
+				JOptionPane.showMessageDialog(this,"activity name cannot be empty");
+				return;
+			}
+                        // Check if durin is a number and not a texst
+			if ( !durin.getText().matches("[0-9]+") ) {
+				JOptionPane.showMessageDialog(this,"duration must be integer");
+				return;
+			}
+                        
+                        if (!function.activityExists(actin.getText())) {
+                            JOptionPane.showMessageDialog(this,"Activity does not exist");
+                            return;
+                        }
+                        
+                        
+                        function.updateDuraton(actin.getText(), Integer.parseInt(durin.getText()));                        
+			actin.setText("");
+			durin.setText("");
+			dependein.setText("");
+			JOptionPane.showMessageDialog(this,"Duration updated");
 		}
 		
 	}
