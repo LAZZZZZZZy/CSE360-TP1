@@ -25,7 +25,7 @@ public class UI extends JFrame implements ActionListener {
 	private JMenuBar menubar;
 	private JMenu helpm, aboutm,filem;
 	private JToolBar toolbar;
-	private JButton input, process, restart, quit, added,critical;
+	private JButton input, process, restart, quit, added,critical, report;
 
 	private JPanel mainpanel;
 	private ListPanel listpanel;
@@ -67,12 +67,14 @@ public class UI extends JFrame implements ActionListener {
 		process = new JButton("Process");
 		restart = new JButton("Restart");
 		quit = new JButton("Quit");
+                report = new JButton("Report");
 		input.addActionListener(this);
 		process.addActionListener(this);
 		restart.addActionListener(this);
 		quit.addActionListener(this);
 		added.addActionListener(this);
 		critical.addActionListener(this);
+                report.addActionListener(this);
 
 		toolbar.add(input);
 		toolbar.addSeparator();
@@ -84,6 +86,8 @@ public class UI extends JFrame implements ActionListener {
 		toolbar.addSeparator();
 		toolbar.add(restart);
 		toolbar.addSeparator();
+		toolbar.add(report);
+                toolbar.addSeparator();
 		toolbar.add(quit);
 
 		// graphic area
@@ -175,6 +179,10 @@ public class UI extends JFrame implements ActionListener {
 			criticalpanel.Output();
 			card.show(mainpanel,"critical");
 		}
+                if (e.getSource() == report)
+                {
+                    
+                }
 		
 		if(e.getSource()==quit) {
 			System.exit(0);
