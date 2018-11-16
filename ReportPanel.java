@@ -59,7 +59,8 @@ public class ReportPanel extends JPanel implements ActionListener {
                 // Write date and time
                 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa");
                 Date date = new Date();
-                printWriter.println(dateFormat.format(date) + "\n");
+                printWriter.println(dateFormat.format(date));
+                printWriter.println("**************************************");
 
                 // Added all nodes
                 printWriter.println("Added Activities:");
@@ -68,7 +69,7 @@ public class ReportPanel extends JPanel implements ActionListener {
                     printWriter.println(n);
                 }
                 
-                printWriter.println(); // print line
+                printWriter.println("**************************************");
                 
                 // Add All Paths
                 printWriter.println("All Paths");
@@ -76,7 +77,7 @@ public class ReportPanel extends JPanel implements ActionListener {
                     printWriter.println(path);
                 }
               
-                printWriter.println(); // print line
+                printWriter.println("**************************************");
                 
                 // Add All Critical Paths
                 printWriter.println("Critical Paths");
