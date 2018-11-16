@@ -22,7 +22,7 @@ public class ReportPanel extends JPanel implements ActionListener {
 
     public ReportPanel(Function function) {
         this.function = function;
-        
+
         this.setLayout(null);
         // Add JTextField and JButton
         JLabel name = new JLabel("Report Name: ");
@@ -30,11 +30,11 @@ public class ReportPanel extends JPanel implements ActionListener {
         fileName = new JTextField();
         createButton = new JButton("Create");
         createButton.addActionListener(this);
-        
-        name.setBounds(30,60,100,50);
+
+        name.setBounds(30, 60, 100, 50);
         fileName.setBounds(150, 70, 400, 30);
         createButton.setBounds(250, 120, 100, 30);;
-        
+
         this.add(name);
         this.add(fileName);
         this.add(createButton);
@@ -61,7 +61,20 @@ public class ReportPanel extends JPanel implements ActionListener {
                 Date date = new Date();
                 printWriter.println(dateFormat.format(date) + "\n");
 
-                /////
+                // Added all nodes
+                printWriter.println("Added Activities:");
+                
+                for (Node n : function.getNodes()) {
+                    printWriter.println(n);
+                }
+                
+                printWriter.println(); // print line
+                
+                // Add Critical Paths
+                printWriter.println("Critical Paths");
+                for (Path path : function.getPath()) {
+                    printWriter.println(path);
+                }
                 
                 System.out.println(fileName + " was written");
 
@@ -71,6 +84,7 @@ public class ReportPanel extends JPanel implements ActionListener {
             } catch (IOException e) {
             }
 
+            fileName.setText("");
             JOptionPane.showMessageDialog(this, "File Created");
         }
 
