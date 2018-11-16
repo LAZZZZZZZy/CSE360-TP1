@@ -70,9 +70,17 @@ public class ReportPanel extends JPanel implements ActionListener {
                 
                 printWriter.println(); // print line
                 
-                // Add Critical Paths
-                printWriter.println("Critical Paths");
+                // Add All Paths
+                printWriter.println("All Paths");
                 for (Path path : function.getPath()) {
+                    printWriter.println(path);
+                }
+              
+                printWriter.println(); // print line
+                
+                // Add All Critical Paths
+                printWriter.println("Critical Paths");
+                for (Path path : function.getCriticalPath()) {
                     printWriter.println(path);
                 }
                 
