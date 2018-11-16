@@ -25,13 +25,14 @@ public class UI extends JFrame implements ActionListener {
 	private JMenuBar menubar;
 	private JMenu helpm, aboutm,filem;
 	private JToolBar toolbar;
-	private JButton input, process, restart, quit, added,critical;
+	private JButton input, process, restart, quit, added,critical, report;
 
 	private JPanel mainpanel;
 	private ListPanel listpanel;
 	private InputPanel inputpanel;
 	private AddedPanel addedpanel;
 	private CriticalPanel criticalpanel;
+        private ReportPanel reportPanel;
 	
 	private CardLayout card;
 
@@ -48,6 +49,7 @@ public class UI extends JFrame implements ActionListener {
 		inputpanel = new InputPanel(function);
 		listpanel = new ListPanel(function);// paint panel
 		criticalpanel = new CriticalPanel(function);
+                reportPanel = new ReportPanel(function);
 		// menu bar
 		menubar = new JMenuBar();
 
@@ -67,12 +69,14 @@ public class UI extends JFrame implements ActionListener {
 		process = new JButton("Process");
 		restart = new JButton("Restart");
 		quit = new JButton("Quit");
+                report = new JButton("Report");
 		input.addActionListener(this);
 		process.addActionListener(this);
 		restart.addActionListener(this);
 		quit.addActionListener(this);
 		added.addActionListener(this);
 		critical.addActionListener(this);
+                report.addActionListener(this);
 
 		toolbar.add(input);
 		toolbar.addSeparator();
@@ -82,7 +86,9 @@ public class UI extends JFrame implements ActionListener {
 		toolbar.addSeparator();
 		toolbar.add(process);
 		toolbar.addSeparator();
-		toolbar.add(restart);
+		toolbar.add(report);
+                toolbar.addSeparator();
+                toolbar.add(restart);
 		toolbar.addSeparator();
 		toolbar.add(quit);
 
@@ -95,6 +101,7 @@ public class UI extends JFrame implements ActionListener {
 		mainpanel.add(listpanel,"list");
 		mainpanel.add(new JScrollPane(addedpanel),"added");
 		mainpanel.add(criticalpanel,"critical");
+                mainpanel.add(reportPanel, "report");
 		this.add(mainpanel,BorderLayout.CENTER);
 
 		// property of Jframe
@@ -175,6 +182,29 @@ public class UI extends JFrame implements ActionListener {
 			criticalpanel.Output();
 			card.show(mainpanel,"critical");
 		}
+                if (e.getSource() == report)
+                {
+                    if(!function.ConnectNodes()) {
+				JOptionPane.showMessageDialog(this,"Some dependencies do not exist");
+				return;
+			}
+			if ( function.getNodes().isEmpty() ) {
+				JOptionPane.showMessageDialog(this,"No input node");
+				return;
+			}
+
+			if ( !function.errorCheckingCycle() ) {
+				JOptionPane.showMessageDialog(this,"It has a cycle");
+				return;
+			}
+
+			if ( !function.errorCheckingConnect() ) {
+				JOptionPane.showMessageDialog(this,"some nodes are not connected");
+				return;
+			}
+                        
+                    card.show(mainpanel, "report");
+                }
 		
 		if(e.getSource()==quit) {
 			System.exit(0);
