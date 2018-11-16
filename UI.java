@@ -32,6 +32,7 @@ public class UI extends JFrame implements ActionListener {
 	private InputPanel inputpanel;
 	private AddedPanel addedpanel;
 	private CriticalPanel criticalpanel;
+        private ReportPanel reportPanel;
 	
 	private CardLayout card;
 
@@ -48,6 +49,7 @@ public class UI extends JFrame implements ActionListener {
 		inputpanel = new InputPanel(function);
 		listpanel = new ListPanel(function);// paint panel
 		criticalpanel = new CriticalPanel(function);
+                reportPanel = new ReportPanel();
 		// menu bar
 		menubar = new JMenuBar();
 
@@ -99,6 +101,7 @@ public class UI extends JFrame implements ActionListener {
 		mainpanel.add(listpanel,"list");
 		mainpanel.add(new JScrollPane(addedpanel),"added");
 		mainpanel.add(criticalpanel,"critical");
+                mainpanel.add(reportPanel, "report");
 		this.add(mainpanel,BorderLayout.CENTER);
 
 		// property of Jframe
@@ -181,7 +184,7 @@ public class UI extends JFrame implements ActionListener {
 		}
                 if (e.getSource() == report)
                 {
-                    
+                    card.show(mainpanel, "report");
                 }
 		
 		if(e.getSource()==quit) {
