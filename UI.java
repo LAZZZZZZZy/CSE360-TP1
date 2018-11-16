@@ -49,7 +49,7 @@ public class UI extends JFrame implements ActionListener {
 		inputpanel = new InputPanel(function);
 		listpanel = new ListPanel(function);// paint panel
 		criticalpanel = new CriticalPanel(function);
-                reportPanel = new ReportPanel();
+                reportPanel = new ReportPanel(function);
 		// menu bar
 		menubar = new JMenuBar();
 
@@ -184,6 +184,25 @@ public class UI extends JFrame implements ActionListener {
 		}
                 if (e.getSource() == report)
                 {
+                    if(!function.ConnectNodes()) {
+				JOptionPane.showMessageDialog(this,"Some dependencies do not exist");
+				return;
+			}
+			if ( function.getNodes().isEmpty() ) {
+				JOptionPane.showMessageDialog(this,"No input node");
+				return;
+			}
+
+			if ( !function.errorCheckingCycle() ) {
+				JOptionPane.showMessageDialog(this,"It has a cycle");
+				return;
+			}
+
+			if ( !function.errorCheckingConnect() ) {
+				JOptionPane.showMessageDialog(this,"some nodes are not connected");
+				return;
+			}
+                        
                     card.show(mainpanel, "report");
                 }
 		
