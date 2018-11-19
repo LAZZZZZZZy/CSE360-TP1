@@ -44,9 +44,9 @@ public class UI extends JFrame implements ActionListener {
 		card = new CardLayout();
 		mainpanel = new JPanel(card);
 		nodes = new ArrayList<Node>();
-		addedpanel = new AddedPanel();
-		function = new Function(nodes,addedpanel);
-		inputpanel = new InputPanel(function);
+		function = new Function(nodes);
+		addedpanel = new AddedPanel(function);
+                inputpanel = new InputPanel(function);
 		listpanel = new ListPanel(function);// paint panel
 		criticalpanel = new CriticalPanel(function);
                 reportPanel = new ReportPanel(function);
@@ -130,6 +130,11 @@ public class UI extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this,"reset");
 		}
 		if ( e.getSource() == added ) {
+                    	if ( function.getNodes().isEmpty() ) {
+                            JOptionPane.showMessageDialog(this,"No input node");
+                            return;
+			}                        
+                        addedpanel.Output();
 			card.show(mainpanel,"added");
 		}
 
@@ -203,7 +208,7 @@ public class UI extends JFrame implements ActionListener {
 				return;
 			}
                         
-                    card.show(mainpanel, "report");
+                        card.show(mainpanel, "report");
                 }
 		
 		if(e.getSource()==quit) {

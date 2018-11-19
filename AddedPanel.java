@@ -1,36 +1,34 @@
 
-import java.awt.Panel;
-import java.util.List;
-
-import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
-/**
- *
- */
-/**
- * @author Administrator
- *
- */
-public class AddedPanel extends JTextArea {
+public class AddedPanel extends JPanel {
 
+    private Function function;
+    private JTextArea content;
 
-    JTextField actin;
-    JTextField durin;
-    JTextField dependein;
+    public AddedPanel(Function function) {
+        this.setLayout(new BorderLayout());
+        this.function = function;
 
-    /**
-     *
-     */
-    public AddedPanel() {
-    	this.setEditable(false);
-        // TODO Auto-generated constructor stub
-        //this.setLayout(null);
+        content = new JTextArea();
+        content.setEditable(false);
 
-        //JLabel List = new JLabel("Added list");
-        //List.setBounds(250, 10, 100, 10);
-        //this.add(List);
+        JScrollPane jsp = new JScrollPane(content);
+        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        content.setEditable(false);
+        
+        this.add(jsp, BorderLayout.CENTER);
     }
 
+    public void Output() {
+        content.setText("");
+        for (Node n : function.getNodes()) {
+            content.append(n.toString());
+            this.repaint();
+            this.revalidate();
+        }
+    }
 }

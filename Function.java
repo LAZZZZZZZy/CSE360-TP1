@@ -20,11 +20,9 @@ public class Function {
 	HashMap<Node,Integer> early;
 	HashMap<Node,Integer> late; 
 	
-	private AddedPanel addedPanel;
 
-	public Function ( List<Node> nodes, AddedPanel addedPanel ) {
+	public Function ( List<Node> nodes) {
 		this.nodes = nodes;
-		this.addedPanel = addedPanel;
 		startNodes = new HashSet<Node>();
 		path = new ArrayList<Path>();
 		criticalPath = new ArrayList<Path>();
@@ -292,7 +290,6 @@ public class Function {
 
 		nodes.add(newNode);
 
-		this.updateList(addedPanel);
 		printList();
 	}
 
@@ -355,14 +352,6 @@ public class Function {
 	public boolean hasNode ( String name ) {
 		return false;
 	}
-
-	public void updateList ( JTextArea textField ) {
-		textField.setText("");
-		
-		for ( Node n : nodes ) {
-			textField.append(n.toString());
-		}
-	}
 	
 	public void processini() {
 		path.clear();
@@ -381,9 +370,7 @@ public class Function {
 		startNodes.clear();
 		tailNodes.clear();
 		early.clear();
-		late.clear();
-		
-		updateList(addedPanel);
+		late.clear();		
 	}
 
 
@@ -417,10 +404,9 @@ public class Function {
            for (Node n : nodes) {
                if (n.getName().equals(activity)) {
                    n.setDuration(newDuration);
-                   break;
+                   return;
                }
            }
-           this.updateList(addedPanel);
         }
 
 }
